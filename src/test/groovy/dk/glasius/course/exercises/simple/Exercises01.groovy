@@ -1,6 +1,6 @@
 package dk.glasius.course.exercises.simple
 
-
+import org.codehaus.groovy.runtime.GStringImpl
 import spock.lang.Specification
 import spock.lang.Unroll
 
@@ -15,23 +15,23 @@ class Exercises01 extends Specification {
             string.getClass().is(clazz)
         where:
             string     || clazz
-            'a'        || Object
-            "a"        || Object
-            '${1}'     || Object
-            "${1}"     || Object
-            '''a'''    || Object
-            '''${1}''' || Object
-            """a"""    || Object
-            """${1}""" || Object
-            /${1}/     || Object
-            /$1/       || Object
-            $/${1}/$   || Object
-            $/$$1/$    || Object
+            'a'        || String
+            "a"        || String
+            '${1}'     || String
+            "${1}"     || GStringImpl
+            '''a'''    || String
+            '''${1}''' || String
+            """a"""    || String
+            """${1}""" || GStringImpl
+            /${1}/     || GStringImpl
+            /$1/       || String
+            $/${1}/$   || GStringImpl
+            $/$$1/$    || String
     }
 
     def 'How to handle chars'() {
         given: "Fix this statement"
-            def c = 'A'
+            def c = 'A' as Character
 
         expect: "So that this does not fail"
             c instanceof Character
@@ -42,7 +42,7 @@ class Exercises01 extends Specification {
             def number = 42
             def what = 'life, the Universe and everything'
         and: 'A GString'
-            def gstring = ''
+            def gstring = "${number} is the answer to ${what}"
 
         expect: 'the answer to be'
             gstring == '42 is the answer to life, the Universe and everything'
@@ -51,14 +51,14 @@ class Exercises01 extends Specification {
             number = 45
 
         then: 'what will the right value for the gstring?'
-            gstring == '?'
+            gstring == '42 is the answer to life, the Universe and everything'
     }
 
     def 'Testing GStrings lazy evaluation'() {
         given: 'A variable'
             def a = 1
         and: 'A GString'
-            def gstring = ''
+            def gstring = "a is ${-> a}"
 
         expect: 'the evaluation of the GString should be'
             gstring == 'a is 1'
@@ -72,18 +72,18 @@ class Exercises01 extends Specification {
 
     def 'repeat a string'() {
         expect: 'a Groovy way to repeat a string'
-            '*-*'  == '*-**-**-**-**-**-**-**-**-**-*'
+            '*-*' * 10 == '*-**-**-**-**-**-**-**-**-**-*'
     }
 
     def 'remove part of a string'() {
         expect: 'an intuitive way to remove part of a string'
-            'This is NOT Groovy'  == 'This is Groovy'
+            'This is NOT Groovy' - 'NOT ' == 'This is Groovy'
     }
 
     @Unroll
     def 'align a string'() {
         expect: 'a Groovy way to pad a string'
-            "$number" == output
+            "$number".padLeft(5) == output
 
         where: 'data is taken from this table'
             number || output
@@ -96,7 +96,10 @@ class Exercises01 extends Specification {
 
     def 'an easy way to make a string with multiple lines indented right'() {
         expect: 'a multiline string to produce the right output'
-            ''.stripIndent() == '<x>\n    <y>Z</y>\n</x>'
+            '''\
+                <x>
+                    <y>Z</y>
+                </x>'''.stripIndent() == '<x>\n    <y>Z</y>\n</x>'
     }
 
     def 'Hashing strings'() {
@@ -104,6 +107,7 @@ class Exercises01 extends Specification {
             "Value: ${1}" == 'Value: 1'
         and: 'This is not true, explain why'
             "Value: ${1}".hashCode() != 'Value: 1'.hashCode()
+
     }
 
 }
