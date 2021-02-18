@@ -9,7 +9,7 @@ import spock.lang.Unroll
 class Exercises03 extends Specification {
     def "simple closure"() {
         given: 'Define a closure that takes one argument'
-            def closure = {  }
+            def closure = { it * 3 }
         when: 'called with a number'
             def result = closure.call(3)
         then: 'returns the number multiplied by itself'
@@ -18,7 +18,7 @@ class Exercises03 extends Specification {
 
     def "simple closure II"() {
         given: 'Define a closure that takes two arguments'
-            def closure = { }
+            def closure = { a, b -> a * b }
         when: 'called with two numbers'
             def result = closure.call(3, 4)
         then: 'returns the numbers multiplied '
@@ -27,7 +27,7 @@ class Exercises03 extends Specification {
 
     def "simple closure III"() {
         given: 'Define a closure that takes one or two arguments'
-            def closure = { }
+            def closure = { a, b = null -> a * (b ?: a) }
         when: 'called with one number'
             def result = closure.call(3)
         then: 'returns the number multiplied by it self '
@@ -41,7 +41,7 @@ class Exercises03 extends Specification {
     @Unroll
     def "Simple closure IV"() {
         given: 'Define a closure that takes n strings'
-            def closure = { }
+            def closure = { it.join('') }
         when: 'called with an abirary number of args'
             def result = closure.call(args as String[])
         then: 'we expect this result'
@@ -64,7 +64,7 @@ class Exercises03 extends Specification {
                 lastName = "Doe"
             }
         and: 'the delegate is assigned to what?'
-            closure.delegate = this // Change here
+            closure.delegate = new Person()
 
         when: 'when calling the closure'
             closure.call()

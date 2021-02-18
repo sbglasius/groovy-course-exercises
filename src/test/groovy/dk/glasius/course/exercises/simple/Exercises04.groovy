@@ -9,17 +9,17 @@ class Exercises04 extends Specification {
 
     def "indexing in arrays"() {
         expect: 'the size'
-            array.m() == 4
+            array.size() == 4
         and: 'get first element'
-            array == 'a'
+            array[0] == 'a'
         and: 'how about last element?'
-            array == 'd'
+            array[-1] == 'd'
         and: 'second last element?'
-            array == 'c'
+            array[-2] == 'c'
         and: 'last two elements?'
-            array == ['c', 'd']
+            array[-2..-1] == ['c', 'd']
         and: 'last three elements in reverse order?'
-            array == ['d', 'c', 'b']
+            array[-1..-3] == ['d', 'c', 'b']
     }
 
     def "indexing in arrays II"() {
@@ -28,21 +28,21 @@ class Exercises04 extends Specification {
         then: 'catch the exception thrown'
             def e = thrown(Exception)
         and: 'what is it expected to be?'
-            e.getClass().is Exception
+            e.getClass().is ArrayIndexOutOfBoundsException
     }
 
     def "methods on arrays"() {
         given: 'an array'
             def numbers = [29, 7, 13, 3, 19, 9, 23, 11]
         expect: 'the lowest number'
-            numbers.x() == 3
+            numbers.min() == 3
         and: 'the highest number'
-            numbers.x() == 29
+            numbers.max() == 29
         and: 'the sum'
-            numbers.x() == 114
+            numbers.sum() == 114
         and: 'the average'
-            numbers.x() / numbers.x() == 14.25
+            numbers.sum() / numbers.size() == 14.25
         and: 'the first number greater than 10'
-            numbers.x().y {  } == 11
+            numbers.sort().find({ it > 10 }) == 11
     }
 }
