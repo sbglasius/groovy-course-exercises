@@ -42,7 +42,7 @@ class Exercises05 extends Specification {
         when: 'addressing non e_isting inde_es'
             def result = list[10]
         then: 'expect what?'
-            result == ? // What is the expected outcome?
+            result == '?' // What is the expected outcome?
     }
 
     def "manipulating a list"() {
